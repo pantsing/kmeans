@@ -104,13 +104,13 @@ func seed(data []ClusteredObservation, k int, distanceFunction DistanceFunction)
 
 // K-Means Algorithm
 func kmeans(data []ClusteredObservation, mean []Observation, distanceFunction DistanceFunction, threshold int) ([]ClusteredObservation, error) {
-	counter := 0
 	for ii, jj := range data {
 		closestCluster, _ := near(jj, mean, distanceFunction)
 		data[ii].ClusterNumber = closestCluster
 	}
 	mLen := make([]int, len(mean))
-	for n := len(data[0].Observation); ; {
+	n := len(data[0].Observation)
+	for counter := 0; counter < threshold; counter++ {
 		for ii := range mean {
 			mean[ii] = make(Observation, n)
 			mLen[ii] = 0
@@ -129,8 +129,7 @@ func kmeans(data []ClusteredObservation, mean []Observation, distanceFunction Di
 				data[ii].ClusterNumber = closestCluster
 			}
 		}
-		counter++
-		if changes == 0 || counter > threshold {
+		if changes == 0 {
 			return data, nil
 		}
 	}
